@@ -1,6 +1,6 @@
 <template>
     <div>
-        user/index
+        user
     </div>
 </template>
 
