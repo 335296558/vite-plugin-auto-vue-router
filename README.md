@@ -81,4 +81,4 @@
 
 
 ##### 版本
-    v1.1.6 增加import.meta.globEager方法生成的模式 [globEager模式的]
+    v2.0.0 增加import.meta.globEager方法生成的模式 [globEager模式的]
