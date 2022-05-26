@@ -1,4 +1,5 @@
 # vite-plugin-auto-vue-router
+[globEager模式的](README.globEager.md)
 #### 介绍
     一个通过指定目录的.vue生成vue-router路由的插件
     安装vue-router@4 以上版本
