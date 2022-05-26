@@ -78,3 +78,7 @@
     2、LoadComponentMode=defineAsyncComponent 控制台警告，但不影响跳转！建议不要用此模式，
     
 所以你一定要使用建议你用[globEager模式的](README.globEager.md)
+
+
+##### 版本
+    v1.1.6 增加import.meta.globEager方法生成的模式 [globEager模式的]
