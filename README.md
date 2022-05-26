@@ -68,7 +68,9 @@
 
     否则不支持mata、redirect、aliasOf、meta、beforeEnter参数
 ###### 其它说明
-    关于layout布局，如果你需要帮助？可以参考https://github.com/335296558/vite-plugin-auto-vue-router/tree/master/example实例去实现
+    关于layout布局，如果你需要帮助？可以参考https://github.com/335296558/vite-plugin-auto-vue-router/tree/master/example
+    实例去实现,
+    
 
 ##### 已知问题
     1、新建、删除目录文件没有热更新，解决办法：重启服务、或重载vite.config.js
