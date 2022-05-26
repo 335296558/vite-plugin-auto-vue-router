@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/335296558/vite-plugin-auto-vue-router"
+    "url": "git+https://github.com/335296558/vite-plugin-auto-vue-router.git"
   },
   "dependencies": {
     "fast-glob": "^3.2.11",
@@ -36,5 +36,15 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "description": "[默认模式的](README.md) #### 介绍     一个基于vite import.meta.globEager 并指定目录的.vue生成vue-router的路由插件     安装vue-router@4 以上版本",
+  "bugs": {
+    "url": "https://github.com/335296558/vite-plugin-auto-vue-router/issues"
+  },
+  "homepage": "https://github.com/335296558/vite-plugin-auto-vue-router#readme",
+  "directories": {
+    "example": "example"
+  },
+  "author": "",
+  "license": "ISC"
 }
