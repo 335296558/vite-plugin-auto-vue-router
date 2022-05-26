@@ -76,4 +76,4 @@
     1、新建、删除目录文件没有热更新，解决办法：重启服务、或重载vite.config.js
     2、LoadComponentMode=defineAsyncComponent 控制台警告，但不影响跳转！建议不要用此模式，
     
-所以你一定要使用建议你用globEager模式的[README.md](README.globEager.md) | globEager模式的
+所以你一定要使用建议你用globEager模式的[README.globEager.md](README.md) | globEager模式的
