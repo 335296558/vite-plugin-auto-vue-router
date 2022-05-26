@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import vitePluginAutoVueRouter from '../dist/index.fg.js'
+import vitePluginAutoVueRouter from 'vite-plugin-auto-vue-router/dist/globEager'
 import vitePluginVueLayouts from '../../vite-plugin-vue-layouts/dist/index.js'
 
 // https://vitejs.dev/config/

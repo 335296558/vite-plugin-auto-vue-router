@@ -42,7 +42,7 @@ const plugins = [
 const name = 'vitePluginAutoVueRouter'
 export default [
 	{
-		input: './src/index.fg.js',
+		input: './src/index.js',
 		output: {
 			name: name,
 			file: pkg.main,
@@ -52,10 +52,10 @@ export default [
 		plugins
 	},
     {
-		input: './src/index.js',
+		input: './src/globEager.js',
 		output: {
-			name: name+'/index',
-			file: 'dist/index.js',
+			name: name,
+			file: 'dist/globEager.js',
 			format: 'cjs',
             exports: 'default',
 		},
