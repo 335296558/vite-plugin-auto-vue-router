@@ -30,22 +30,4 @@
     VueApp.mount('#app')
 ```
 
-#### main.js 使用说明
-```js
-    // main.js
-
-    import { createApp } from 'vue'
-
-    import App from './App.vue'
-
-    const VueApp = createApp(App);
-
-    import AutoVueRouter from 'auto-vue-router'
-
-    VueApp.use(AutoVueRouter);
-
-    VueApp.mount('#app')
-```
-
-
 #### 其它一样
