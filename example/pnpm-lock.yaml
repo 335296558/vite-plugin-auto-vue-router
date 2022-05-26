@@ -4,13 +4,15 @@ specifiers:
   '@vitejs/plugin-vue': ^2.0.0
   sass: ^1.49.8
   vite: ^2.7.2
-  vite-plugin-auto-vue-router: ^1.1.2
+  vite-plugin-auto-vue-router: ^2.0.0
+  vite-plugin-vue3-layouts: ^1.0.1
   vue: ^3.2.25
   vue-router: ^4.0.12
 
 dependencies:
   sass: 1.49.8
-  vite-plugin-auto-vue-router: 1.1.5
+  vite-plugin-auto-vue-router: 2.0.0
+  vite-plugin-vue3-layouts: 1.0.1
   vue: 3.2.30
   vue-router: 4.0.12_vue@3.2.30
 
@@ -596,6 +598,17 @@ packages:
     resolution: {integrity: sha512-3eE5BHDUUPuDKukmLIL/swrbnb6cxqdszeCfe5yCwV8TYpgKu0HV7R06hQCcY46/w01gzq3Q5HyFTir48jpRZQ==}
     dependencies:
       fast-glob: 3.2.11
+    dev: false
+
+  /vite-plugin-auto-vue-router/2.0.0:
+    resolution: {integrity: sha512-MOUa1kpUsoSQjXo9xRnqcHVVfp7XPF7L5VcKf0kT2aX0o8Wr3j4565dKyvkM1b3YKpfAhGFb3yroay7Mzf1wsQ==}
+    dependencies:
+      fast-glob: 3.2.11
+      vite-plugin-auto-vue-router: 1.1.5
+    dev: false
+
+  /vite-plugin-vue3-layouts/1.0.1:
+    resolution: {integrity: sha512-jhFIdpLCqQf3NsM58qnnOlt4Q5CF1wZgSxS4PAzot6Hc1KLUkA8oMtsl6j72k5/qN99/tuFl479VCm3EA1tNoA==}
     dev: false
 
   /vite/2.8.1_sass@1.49.8:
