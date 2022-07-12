@@ -22,5 +22,15 @@ export default defineConfig({
 				replacement: `${process.cwd()}/src`,
 			},
 		],
-	}
+	},
+    server: {
+        watch: {
+            ignored: ['!**/node_modules/vite-plugin-auto-vue-router/**']
+        }
+    },
+    // 被监听的包必须被排除在优化之外，
+    // 以便它能出现在依赖关系图中并触发热更新。
+    optimizeDeps: {
+        exclude: ['vite-plugin-auto-vue-router']
+    }
 });

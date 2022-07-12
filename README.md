@@ -21,7 +21,18 @@
             vitePluginAutoVueRouter({
                 env: process.env.NODE_ENV,
             })
-        ]
+        ],
+        // 务必要加上下面的代码，否则vite-plugin-auto-vue-router插件无法热更新
+        server: {
+            watch: {
+                ignored: ['!**/node_modules/vite-plugin-auto-vue-router/**']
+            }
+        },
+        // 被监听的包必须被排除在优化之外，
+        // 以便它能出现在依赖关系图中并触发热更新。
+        optimizeDeps: {
+            exclude: ['vite-plugin-auto-vue-router']
+        }
     };
 ```
 
