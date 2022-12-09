@@ -7,11 +7,10 @@
     "url": "git+https://github.com/335296558/vite-plugin-auto-vue-router.git"
   },
   "dependencies": {
-    "fast-glob": "^3.2.11",
-    "vite-plugin-auto-vue-router": "^1.1.5"
+    "fast-glob": "^3.2.11"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.10",
+    "@babel/core": "^7.17.2",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.1.3",

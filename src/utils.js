@@ -46,8 +46,8 @@ export const getRouteData = (filePath, viewPath)=> {
         name,
         varName,
         importStringFun: `()=>import('${filePath}')`,
-        importString: `import ${varName? varName : `* as `} from '${filePath}'`
+        importString: `import ${varName? varName : `&nbsp;*&nbsp; as `} from '${filePath}'`
     }
-    // console.log('item=>', item)
+    console.log('item=>', item)
     return item
 }

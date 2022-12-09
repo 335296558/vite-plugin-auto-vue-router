@@ -1,6 +1,6 @@
 // 一次性加载所有页面的自动路由方案，主要采用import.meta.globEager for 实现
 
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory,createWebHistory } from 'vue-router'
 // const modules = import.meta.glob('./src/pages/**/*.vue')
 
 // *[^src] 意思是：匹配所有，但不包括有src字符的
@@ -47,7 +47,7 @@ const getRouteData = (filePath, viewPath='./src/pages/')=> {
         name,
         varName,
         importStringFun: `()=>import('${filePath}')`,
-        importString: `import ${varName? varName : `* as `} from '${filePath}'`
+        importString: `import ${varName? varName : ` * as `} from '${filePath}'`
     }
     return item
 }
@@ -99,7 +99,7 @@ for (const path in modules) {
 // routers.push(defaultRouterF(modules[path].default, opt.errorPageMatch))
 
 export const $router = createRouter({
-    history: createWebHashHistory(),
+    history: import.meta.env.SSR?createWebHashHistory():createWebHistory(),
     routes: routers
 })
 

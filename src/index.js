@@ -7,9 +7,8 @@
  * @name vite-plugin-auto-vue-router || vitePluginAutoVueRouter
  */
 
-import fs from 'fs';
 import { join } from 'path';
-import { sync as fg } from 'fast-glob'
+import { sync as fg } from 'fast-glob';
 import { getMixName, getRouteData } from './utils.js';
 export default function vitePluginAutoVueRouter(opt={}) {
 	const ModuleId = 'auto-vue-router'
@@ -149,11 +148,11 @@ export default function vitePluginAutoVueRouter(opt={}) {
             if (id === resolvedModuleId) {
                 return `'use strict';
                 \nimport { defineAsyncComponent } from 'vue'
-                \nimport { createRouter, createWebHashHistory } from 'vue-router'
+                \nimport { createRouter, createWebHashHistory,createWebHistory } from 'vue-router'
                 \n${importComponents}
                 \nconst routers = [${router}]
                 \nexport const $router = createRouter({
-                    \n  history: createWebHashHistory(),
+                    \n  history: import.meta.env.SSR? createMemoryHistory(): createWebHistory(),
                     \n  routes: routers
                 \n})
                 \nexport default $router

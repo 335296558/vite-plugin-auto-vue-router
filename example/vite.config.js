@@ -1,14 +1,15 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import vitePluginAutoVueRouter from 'vite-plugin-auto-vue-router/dist/globEager'
+// import vitePluginAutoVueRouter from 'vite-plugin-auto-vue-router/dist/globEager'
+// import vitePluginAutoVueRouter from '../src/index.js';
+import vitePluginAutoVueRouter from '../src/globEager.js';
 // import vitePluginVueLayouts from '../../vite-plugin-vue3-layouts/dist/index.js'
 import vitePluginVueLayouts from 'vite-plugin-vue3-layouts'
-
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
         vue(),
-        vitePluginAutoVueRouter(),
+        vitePluginAutoVueRouter({}),
         vitePluginVueLayouts({
             plugins:[
                 'auto-vue-router',
