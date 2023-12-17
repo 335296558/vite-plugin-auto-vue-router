@@ -7,10 +7,17 @@
 		</div>
 	</div>
 </template>
-<script>
-export default {
-    displayName: '404'
-}
+
+<script setup>
+defineOptions({
+    customOptions: {
+        route:{
+            layout: 'noAuth',
+            path: '/:pathMatch(.*)*',
+            name: 'NotFound'
+        }
+    }
+})
 </script>
 
 <style module lang="scss" scoped>

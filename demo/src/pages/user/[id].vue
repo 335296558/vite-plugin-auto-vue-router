@@ -1,14 +1,12 @@
 <template>
     <div>
-        user
+        user[id]
     </div>
 </template>
 
-<script>
-export default {
-    displayName: 'user'
-}
-</script>
 <script setup>
 import { ref, provide, inject } from 'vue'
+import { useRoute } from 'vue-router';
+const route = useRoute();
+console.log(route, '[id]');
 </script>
