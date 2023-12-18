@@ -114,6 +114,7 @@ export default {
         options = Object.assign({
             history: null,
             index: '/index', // 默认首页
+            errorPagePath: '/404',
             RouteBefore:{  // 'path': { ...route }
                 /* path: 'login' 
                 '/login':{
@@ -159,6 +160,13 @@ export default {
                             ...itemComp,
                             path:'/',
                             name: '/'
+                        });
+                        break;
+                    case options.errorPagePath:
+                        routerArray.push({
+                            ...itemComp,
+                            path:'/:pathMatch(.*)*',
+                            name: 'NotFound'
                         });
                         break;
                 }

@@ -9,6 +9,7 @@
 </template>
 
 <script setup>
+import { useRoute } from 'vue-router';
 //! @__ROUTE_LAYOUT__: 'noAuth'
 </script>
 
