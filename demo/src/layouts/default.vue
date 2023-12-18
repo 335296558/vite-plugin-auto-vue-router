@@ -8,8 +8,8 @@
         <router-link class="link" to="/login">Login 不需要权限 走 layouts/noAuth.vue</router-link>
         <br />
         <br />
-        <slot></slot>
     </div>
+    <slot></slot>
 </template>
 
 <script setup lang="ts">

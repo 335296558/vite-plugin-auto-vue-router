@@ -13,7 +13,6 @@ export default defineConfig({
         lib: {
             entry: {
                 index: path.resolve(__dirname, 'src/index.ts'),
-                route: path.resolve(__dirname, 'src/scriptRoute.js'),
             },
             name: 'vitePluginAutoVueRouter',
             formats:['es']

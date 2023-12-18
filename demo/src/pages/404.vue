@@ -9,15 +9,7 @@
 </template>
 
 <script setup>
-defineOptions({
-    customOptions: {
-        route:{
-            layout: 'noAuth',
-            path: '/:pathMatch(.*)*',
-            name: 'NotFound'
-        }
-    }
-})
+//! @__ROUTE_LAYOUT__: 'noAuth'
 </script>
 
 <style module lang="scss" scoped>

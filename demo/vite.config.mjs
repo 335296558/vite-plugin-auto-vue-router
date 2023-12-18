@@ -3,7 +3,6 @@ import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import { fileURLToPath, URL } from "url";
 // import AutoVueRouter from 'vite-plugin-auto-vue-router';
-import ScriptRoutePlugin from '../dist/route';
 import AutoVueRouter from '../dist/index';
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,7 +13,6 @@ export default defineConfig({
     },
     plugins: [
         vue(),
-        ScriptRoutePlugin(),
         AutoVueRouter({
             /* 
             dir、glob 只能2选1，如果2个都在设置那么glob优先，

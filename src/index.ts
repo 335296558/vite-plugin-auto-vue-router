@@ -1,6 +1,6 @@
 // @ts-ignore
 import AutoVueRouterCodeString from './AutoVueRouter.js?raw';
-
+import { extractRouteLayout } from './utils.js';
 function Log(text: string){
     console.log('\x1b[31m%s\x1b[0m', text);
 }
@@ -17,13 +17,10 @@ export default function AutoVueRouter(options: IOptions) {
     const ModuleId = 'virtual:auto-vue-router';
     const resolvedModuleId = '\0' + ModuleId;
 
-    // const routeOptionsModuleId = 'virtual:auto-vue-router/routeOptions';
-    // const routeOptionsResolvedModuleId = '\0' + routeOptionsModuleId;
-
     const defaultGlob = [options.dir+'**/*.vue', '!**/src', '!**/components'];
     const ignores = options.ignore ? options.ignore:[];
     options = Object.assign({
-        debug: false,
+        debug: true,
         dir: null,
         ignore: [], // ! 反面匹配模式，!**/src 这种是过滤的目录
         glob: Array.from(new Set([...defaultGlob, ...ignores])),
@@ -37,21 +34,39 @@ export default function AutoVueRouter(options: IOptions) {
     if (options.debug) {
         console.log(VitePluginName+':',options)
     }
+    let ProjectPath: string|null = null;
+
     return {
         name: ModuleId,
-        resolveId(id: string) {
+        resolveId(id: string, ResourcePath: string) {
+            const rexIndex = /index.html/g;
+            if (rexIndex.test(ResourcePath)) {
+                ProjectPath = ResourcePath.replace(rexIndex, '');
+            }
             if (id === ModuleId) {
                 return resolvedModuleId;
             }
-            // if (id===routeOptionsModuleId) {
-            //     return routeOptionsResolvedModuleId;
-            // }
+        },
+        transform(code: string, id: string) {
+            const sregex = /\.vue$/;
+            if (!sregex.test(id)) {
+                return;
+            }
+            const arrs = id.split('src');
+            const PagePath = arrs[1];
+            if (!PagePath || PagePath.indexOf('/src/') >=0) {
+                return;
+            }
+            if (!/@__ROUTE_LAYOUT__/.test(code)) {
+                return;
+            }
+            const RouteLayout = extractRouteLayout(code);
+            code = code.replace(new RegExp(`${PagePath}"]`,'g'), `${PagePath}"],["__route_layout","${RouteLayout}"]`);
+            return code;
         },
         async load(id: string) {
-            // if (id === routeOptionsResolvedModuleId) {
-            //     return `export default {}`;
-            // }
             if (id === resolvedModuleId) {
+                // console.log('ProjectPath>>>', ProjectPath);
                 if (!options.dir) {
                     const errText = 'vite-plugin-auto-vue-router: The specified page to generate the route does not exist!';
                     Log(errText);
@@ -67,6 +82,7 @@ export default function AutoVueRouter(options: IOptions) {
                 outinput = outinput.replace(globOptionsRegex, `,{ eager: ${options.eager} }`);
                 outinput = outinput.replace(optionsRegex, `const configs = ${JSON.stringify(options)}`);
                 // console.log(outinput, 'outinput');
+                console.log(2);
                 return `\n${outinput}`;
             }
         }

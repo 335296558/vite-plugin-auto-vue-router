@@ -27,41 +27,13 @@ const show = ref(true)
 const Route = useRoute();
 const Router = useRouter();
 Router.beforeEach((to, from, next)=>{
-    console.log(to, '==');
+    show.value = false
+    setLayout(to.meta.layout);
+    setTimeout(()=>{
+        show.value = true
+    }, 380)
     next();
 });
-/*  
-function init() {
-    if (Router) {
-        Router.isReady().then((e) => {
-            try {
-                const cuuRouteItem = Route.matched[0] || null
-                if (cuuRouteItem) {
-                    const cuurPage = cuuRouteItem.components.default
-                    setLayout(cuurPage.layout)
-                }
-                watch(Route, (newRoute) => {
-                    const item = newRoute.matched[0] || null
-                    if (item) {
-                        const page = item.components.default
-                        setLayout(page.layout)
-                    }
-                    show.value = false
-                    setTimeout(()=>{
-                        show.value = true
-                    }, 380)
-                })
-            } catch (error) {
-                console.error(error)
-            }
-        })
-    } else {
-        console.error('Do you want to install vue-router@4')
-    }
-}
-
-init();
-*/
 </script>
 
 <style scoped>

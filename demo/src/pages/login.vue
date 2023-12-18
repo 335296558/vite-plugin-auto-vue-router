@@ -6,8 +6,6 @@
     </div>
 </template>
 
-<script setup route="noAuth">
-import { useRoute } from 'vue-router';
-const route = useRoute();
-route.meta.layout = 'noAuth';
+<script setup lang="ts">
+//! @__ROUTE_LAYOUT__: 'noAuth'
 </script>

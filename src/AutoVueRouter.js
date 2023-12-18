@@ -19,9 +19,6 @@ function getRouteItem(comp, route, isEager = true) {
         beforeEnter: null,
         redirect: null,
         aliasOf: null,
-        meta: {
-            layout: 'default',
-        },
         path: null,
         name: null,
         props: false,
@@ -135,6 +132,7 @@ export default {
         if (!configs.eager) { // 动态导入的逻辑, conpoment: ()=> import('xxx/xxx.vue')
             for (let k in modules) {
                 const comp = modules[k];
+                console.log(comp, 'comp.customOptions')
                 const { RouteName, RoutePath } = getRouteName(k);
                 const itemComp = getRouteItem(comp, { path: RoutePath, name: RouteName }, false);
                 const RouteObjs = options.RouteBefore[RoutePath||RouteName] || {};
@@ -148,9 +146,11 @@ export default {
                 const route = Object.assign({
                     props: false,
                     name: RouteName,
-                    path: RoutePath
+                    path: RoutePath,
+                    meta: {
+                        layout: comp['__route_layout'] || 'default',
+                    },
                 }, comp.customOptions?.route);
-                console.log(comp.customOptions, 'comp.customOptions')
                 const itemComp = getRouteItem(comp, route);
                 routerArray.push(itemComp);
                 switch (route.path) {
