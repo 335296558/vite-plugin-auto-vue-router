@@ -26,7 +26,7 @@ function setLayout(layout='default') {
 const show = ref(true)
 const Route = useRoute();
 const Router = useRouter();
-Router.beforeEach((to, from, next)=>{
+Router?.beforeEach((to, from, next)=>{
     show.value = false
     setLayout(to.meta.layout);
     setTimeout(()=>{

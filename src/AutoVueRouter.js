@@ -133,12 +133,28 @@ export default {
         if (!configs.eager) { // 动态导入的逻辑, conpoment: ()=> import('xxx/xxx.vue')
             for (let k in modules) {
                 const comp = modules[k];
-                console.log(comp, 'comp.customOptions')
                 const { RouteName, RoutePath } = getRouteName(k);
                 const itemComp = getRouteItem(comp, { path: RoutePath, name: RouteName }, false);
                 const RouteObjs = options.RouteBefore[RoutePath||RouteName] || {};
                 Object.assign(itemComp,{ ...RouteObjs });
                 routerArray.push(itemComp);
+                console.log(comp, 'comp.customOptions', RoutePath)
+                switch (RoutePath) {
+                    case options.index:
+                        routerArray.push({
+                            ...itemComp,
+                            path:'/',
+                            name: '/'
+                        });
+                        break;
+                    case options.errorPagePath:
+                        routerArray.push({
+                            ...itemComp,
+                            path:'/:pathMatch(.*)*',
+                            name: 'NotFound'
+                        });
+                        break;
+                }
             }
         } else {
             for (let k in modules) {

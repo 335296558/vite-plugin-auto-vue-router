@@ -1,13 +1,15 @@
 // @ts-ignore
 import AutoVueRouterCodeString from './AutoVueRouter.js?raw';
 import { extractRouteLayout } from './utils.js';
+import path from 'path';
+
 function Log(text: string){
     console.log('\x1b[31m%s\x1b[0m', text);
 }
 
 interface IOptions {
     debug?: boolean;
-    dir: string;
+    dir?: string | null;
     ignore: string[];
     glob: string | string[];
     eager: boolean;
@@ -16,33 +18,32 @@ const VitePluginName = 'vite-plugin-auto-vue-router';
 export default function AutoVueRouter(options: IOptions) {
     const ModuleId = 'virtual:auto-vue-router';
     const resolvedModuleId = '\0' + ModuleId;
-
-    const defaultGlob = [options.dir+'**/*.vue', '!**/src', '!**/components'];
+    if (!options) {
+        options = {} as IOptions;
+    }
+    
+    const defaultGlob = [(options.dir||'/')+'**/*.vue', '!**/src', '!**/components'];
     const ignores = options.ignore ? options.ignore:[];
     options = Object.assign({
-        debug: true,
+        debug: false,
         dir: null,
         ignore: [], // ! 反面匹配模式，!**/src 这种是过滤的目录
         glob: Array.from(new Set([...defaultGlob, ...ignores])),
-        eager: true, // true=默认是一次全部加载完页面 相反则是动态加载
+        eager: false, // true=默认是一次全部加载完页面 相反则是动态加载
     }, options);
-
+    
     const RouterPath = options.glob[0];
     if (!options.dir && RouterPath && RouterPath.indexOf('!') < 0) { // dir 不存在时，找在glob第1个位置找，存在则把它赋给dir,否则不存在则不创建路由
         options.dir = RouterPath;
     }
+   
     if (options.debug) {
         console.log(VitePluginName+':',options)
     }
-    let ProjectPath: string|null = null;
 
     return {
         name: ModuleId,
-        resolveId(id: string, ResourcePath: string) {
-            const rexIndex = /index.html/g;
-            if (rexIndex.test(ResourcePath)) {
-                ProjectPath = ResourcePath.replace(rexIndex, '');
-            }
+        async resolveId(id: string) {
             if (id === ModuleId) {
                 return resolvedModuleId;
             }
@@ -66,7 +67,6 @@ export default function AutoVueRouter(options: IOptions) {
         },
         async load(id: string) {
             if (id === resolvedModuleId) {
-                // console.log('ProjectPath>>>', ProjectPath);
                 if (!options.dir) {
                     const errText = 'vite-plugin-auto-vue-router: The specified page to generate the route does not exist!';
                     Log(errText);
@@ -82,7 +82,6 @@ export default function AutoVueRouter(options: IOptions) {
                 outinput = outinput.replace(globOptionsRegex, `,{ eager: ${options.eager} }`);
                 outinput = outinput.replace(optionsRegex, `const configs = ${JSON.stringify(options)}`);
                 // console.log(outinput, 'outinput');
-                console.log(2);
                 return `\n${outinput}`;
             }
         }
