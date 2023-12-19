@@ -3,6 +3,8 @@ lockfileVersion: 5.3
 specifiers:
   '@types/node': ^20.8.8
   '@vitejs/plugin-vue': ^4.5.1
+  fast-glob: ^3.3.2
+  js-yaml: ^4.1.0
   path: ^0.12.7
   pinia: ^2.1.7
   rollup-plugin-copy: ^3.5.0
@@ -12,6 +14,7 @@ specifiers:
   vue-router: ^4.2.5
 
 dependencies:
+  js-yaml: 4.1.0
   pinia: 2.1.7_vue@3.3.12
   vue: 3.3.12
   vue-router: 4.2.5_vue@3.3.12
@@ -19,6 +22,7 @@ dependencies:
 devDependencies:
   '@types/node': 20.10.5
   '@vitejs/plugin-vue': 4.5.2_vite@5.0.10+vue@3.3.12
+  fast-glob: 3.3.2
   path: 0.12.7
   rollup-plugin-copy: 3.5.0
   sass: 1.69.5
@@ -488,6 +492,10 @@ packages:
       picomatch: 2.3.1
     dev: true
 
+  /argparse/2.0.1:
+    resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
+    dev: false
+
   /array-union/2.1.0:
     resolution: {integrity: sha512-HGyxoOTYUyCM6stUe6EJgnd4EoewAI7zMdfqO+kGjnlZmBDz/cR5pf8r/cR4Wq60sL/p0IkcjUEEPwS3GFrIyw==}
     engines: {node: '>=8'}
@@ -717,6 +725,13 @@ packages:
     resolution: {integrity: sha512-Xnpx182SBMrr/aBik8y+GuR4U1L9FqMSojwDQwPMmxyC6bvEqly9UBCxhauBF5vNh2gwWJNX6oDV7O+OM4z34g==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /js-yaml/4.1.0:
+    resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
+    hasBin: true
+    dependencies:
+      argparse: 2.0.1
+    dev: false
 
   /jsonfile/4.0.0:
     resolution: {integrity: sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==}

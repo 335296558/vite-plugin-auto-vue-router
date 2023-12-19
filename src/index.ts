@@ -1,7 +1,8 @@
 // @ts-ignore
 import AutoVueRouterCodeString from './AutoVueRouter.js?raw';
-import { extractRouteLayout } from './utils.js';
-import path from 'path';
+// @ts-ignore
+import JSYaml from 'js-yaml';
+import { getPageRouteQuery } from './utils';
 
 function Log(text: string){
     console.log('\x1b[31m%s\x1b[0m', text);
@@ -13,11 +14,13 @@ interface IOptions {
     ignore: string[];
     glob: string | string[];
     eager: boolean;
+    root: string;
 }
 const VitePluginName = 'vite-plugin-auto-vue-router';
 export default function AutoVueRouter(options: IOptions) {
     const ModuleId = 'virtual:auto-vue-router';
     const resolvedModuleId = '\0' + ModuleId;
+
     if (!options) {
         options = {} as IOptions;
     }
@@ -40,30 +43,36 @@ export default function AutoVueRouter(options: IOptions) {
     if (options.debug) {
         console.log(VitePluginName+':',options)
     }
-
     return {
         name: ModuleId,
-        async resolveId(id: string) {
+        resolveId(id: string) {
             if (id === ModuleId) {
                 return resolvedModuleId;
             }
         },
         transform(code: string, id: string) {
-            const sregex = /\.vue$/;
-            if (!sregex.test(id)) {
-                return;
+            // if (/\.JSON$/.test(id)) {
+            //     console.log(code, 'code')
+            // }
+            /*
+            * 似呼没有比用yaml设置更好的方案了？
+            * <route lang="yaml">
+            * meta:
+            *     layout: 'noAuth'
+            * </route>
+            */
+            if (!/vue&type=route/.test(id) || !/\.ya?ml$/.test(id)) {
+                return
             }
-            const arrs = id.split('src');
-            const PagePath = arrs[1];
-            if (!PagePath || PagePath.indexOf('/src/') >=0) {
-                return;
+            if (/\.ya?ml$/.test(id)) {
+                code = JSON.stringify(JSYaml.load(code.trim()));
             }
-            if (!/@__ROUTE_LAYOUT__/.test(code)) {
-                return;
-            }
-            const RouteLayout = extractRouteLayout(code);
-            code = code.replace(new RegExp(`${PagePath}"]`,'g'), `${PagePath}"],["__route_layout","${RouteLayout}"]`);
-            return code;
+            
+            return `export default Comp => {
+                Comp.route = {
+                    ...${code}
+                }
+            }`
         },
         async load(id: string) {
             if (id === resolvedModuleId) {
@@ -72,18 +81,21 @@ export default function AutoVueRouter(options: IOptions) {
                     Log(errText);
                     return `export default {}\nconsole.error('${errText}')`;
                 }
-
+                const RouteQuery = await getPageRouteQuery(options.dir);
                 // regex 示例： /\/\*#vite-plugin-auto-vue-router-path\*\//g;
 
                 const pathRegex = new RegExp(`\\/\\*#${VitePluginName}-path\\*\\/`, 'g');
                 const globOptionsRegex = new RegExp(`\\/\\*#${VitePluginName}-glob-rules\\*\\/`, 'g');
                 const optionsRegex = new RegExp(`\\/\\*#${VitePluginName}-options\\*\\/`, 'g');
+                const routeQueryRex = new RegExp(`\\/\\*#${VitePluginName}-route-query\\*\\/`, 'g');
                 let outinput = AutoVueRouterCodeString.replace(pathRegex, `${JSON.stringify(options.glob)}`);
                 outinput = outinput.replace(globOptionsRegex, `,{ eager: ${options.eager} }`);
                 outinput = outinput.replace(optionsRegex, `const configs = ${JSON.stringify(options)}`);
+                outinput = outinput.replace(routeQueryRex, `const RouteQuery = ${JSON.stringify(RouteQuery)}`);
                 // console.log(outinput, 'outinput');
                 return `\n${outinput}`;
             }
         }
     }
+
 }

@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath, URL } from "url";
 // import AutoVueRouter from 'vite-plugin-auto-vue-router';
 import AutoVueRouter from '../dist/index';
+
 // https://vitejs.dev/config/
 export default defineConfig({
     resolve: {

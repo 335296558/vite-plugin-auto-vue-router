@@ -13,26 +13,22 @@
 </template>
 
 <script setup>
-import { ref, watch, markRaw, shallowRef  } from 'vue'
+import { ref, watch, markRaw, shallowRef, computed  } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import DefaultLayout from '@/layouts/default.vue'
 import NoAuthLayout from '@/layouts/noAuth.vue'
 
-const LayoutComponentName = shallowRef(NoAuthLayout)
-
-function setLayout(layout='default') {
-    LayoutComponentName.value = markRaw(layout=='noAuth'? NoAuthLayout: DefaultLayout)
-}
 const show = ref(true)
 const Route = useRoute();
 const Router = useRouter();
-Router?.beforeEach((to, from, next)=>{
+// 计算当前路由的布局组件
+const LayoutComponentName = computed(() => {
     show.value = false
-    setLayout(to.meta.layout);
     setTimeout(()=>{
         show.value = true
     }, 380)
-    next();
+    console.log(Route.meta, 'Route.meta');
+    return markRaw(Route.meta.layout=='noAuth'? NoAuthLayout: DefaultLayout)
 });
 </script>
 

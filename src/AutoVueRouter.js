@@ -1,8 +1,22 @@
 import { ref } from 'vue';
 import { createPinia, defineStore } from 'pinia';
 import { createRouter, createMemoryHistory, createWebHistory } from 'vue-router';
+
 //可写自定义转换插件方案 https://cn.vitejs.dev/guide/migration-from-v1.html#custom-blocks-transforms
+
 const pinia = createPinia();
+
+/*#vite-plugin-auto-vue-router-route-query*/
+
+/* 这里会生成一段这样的代码
+const RouteQuery = {
+    "/login": {
+        "meta": {
+            "layout": "noAuth"
+        }
+    }
+}
+*/
 
 // ! /*#xxx*/ 这种备注一定要注意、注意、注意，它背并不是注释这么简单
 // ! /*#xxx*/ 这种备注一定要注意、注意、注意，它背并不是注释这么简单
@@ -136,9 +150,13 @@ export default {
                 const { RouteName, RoutePath } = getRouteName(k);
                 const itemComp = getRouteItem(comp, { path: RoutePath, name: RouteName }, false);
                 const RouteObjs = options.RouteBefore[RoutePath||RouteName] || {};
-                Object.assign(itemComp,{ ...RouteObjs });
+                let LazyLoadRoute = {};
+                if (typeof RouteQuery === 'object') {
+                    LazyLoadRoute = RouteQuery[RoutePath];
+                }
+                Object.assign(itemComp,{ ...RouteObjs, ...LazyLoadRoute });
+                console.log(itemComp, 'itemComp');
                 routerArray.push(itemComp);
-                console.log(comp, 'comp.customOptions', RoutePath)
                 switch (RoutePath) {
                     case options.index:
                         routerArray.push({
@@ -163,11 +181,8 @@ export default {
                 const route = Object.assign({
                     props: false,
                     name: RouteName,
-                    path: RoutePath,
-                    meta: {
-                        layout: comp['__route_layout'] || 'default',
-                    },
-                }, comp.customOptions?.route);
+                    path: RoutePath
+                }, comp.route);
                 const itemComp = getRouteItem(comp, route);
                 routerArray.push(itemComp);
                 switch (route.path) {
@@ -202,6 +217,7 @@ export default {
         }
 
         RouterAPP.beforeResolve(to => {
+            console.log(to,'==')
             let d = {};
             if (Object.keys(RouteStater.RouteState).length) {
                 d = RouteStater.RouteState[to.path] || RouteStater.RouteState[to.name];

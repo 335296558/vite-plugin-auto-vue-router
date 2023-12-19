@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import { useRoute } from 'vue-router';
+const Route = useRoute();
+function setName() {
+    console.log(99);
+}
+setName();
+</script>
+
 <template>
     <div>
         Login
@@ -6,6 +15,7 @@
     </div>
 </template>
 
-<script setup lang="ts">
-//! @__ROUTE_LAYOUT__: 'noAuth'
-</script>
+<route lang="yaml">
+meta:
+    layout: 'noAuth'
+</route>

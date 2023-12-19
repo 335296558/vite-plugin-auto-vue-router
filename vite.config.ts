@@ -5,6 +5,7 @@ import copy from 'rollup-plugin-copy';
 import vue from '@vitejs/plugin-vue';
 
 const __dirname = path.resolve();
+
 export default defineConfig({
     plugins: [
         vue(),
@@ -18,7 +19,7 @@ export default defineConfig({
             formats:['es']
         },
         rollupOptions: {
-            external: ['vue', 'vue-router', 'url'],
+            external: ['vue', 'vue-router', 'url','fast-glob', 'fs'],
             plugins: [
                 copy({
                     targets: [
