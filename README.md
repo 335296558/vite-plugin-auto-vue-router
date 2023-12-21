@@ -1,6 +1,6 @@
 ### vite-plugin-auto-vue-router 一个基于 vue-router@4 封装的自动创建路由插件，因为不想手动导入 🐳🤪🐯
 ### 该插件能做什么？
-#### 1、根据指定目录自动创建路由，可选：动态加载、首次访问加载全部
+#### 1、根据指定目录自动创建路由，可选：动态加载、同步加载【同步加载首次访问会加载全部路由页面】
 #### 2、支持页面文件名中定义多个参数
 #### 3、页面跳转隐式传参
 #### 4、支持layout布局
@@ -47,21 +47,17 @@ export default defineConfig({
 
 // main.ts
 import AutoVueRouter from 'virtual:auto-vue-router';
-VueApp.use(AutoVueRouter);
+VueApp.use(AutoVueRouter, { /* options */ });
 ```
-##### AutoVueRouter 配置参数说明
-```
-// main.ts
-import AutoVueRouter from 'virtual:auto-vue-router';
-VueApp.use(AutoVueRouter, {
-    history: 
-});
-```
+##### AutoVueRouter options 配置参数说明
 | 参数名 | 类型 | 默认值 | 说明 |
 | -------- | -------- | -------- | -------- |
 | history | String | h5 | h5、hash、ssr |
 | index | String | 'index' | 指定首页的path|
 | errorPagePath | String | '404' | 访问页面不存在时的页面|
+
+
+
 ```js
 h5 等于 createWebHistory
 hash 等于 createWebHashHistory
