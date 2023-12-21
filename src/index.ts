@@ -32,7 +32,7 @@ export default function AutoVueRouter(options: IOptions) {
         dir: null,
         ignore: [], // ! 反面匹配模式，!**/src 这种是过滤的目录
         glob: Array.from(new Set([...defaultGlob, ...ignores])),
-        eager: false, // true=默认是一次全部加载完页面 相反则是动态加载
+        eager: true, // true=默认是一次全部加载完页面 相反则是动态加载
     }, options);
     
     const RouterPath = options.glob[0];

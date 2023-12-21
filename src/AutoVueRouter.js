@@ -50,7 +50,6 @@ function getRouteName(pathStr) { // pathStr = /xxx/xxx.vue
     const pathArrs = RoutePath.split('/');                  // ['xxx', 'xxx']
     const PathLastName = pathArrs[pathArrs.length-1];        // 取最后一个文件名
     let RouteName = RoutePath?.replace(/\//g, '-');       // xxx-xxx
-    const aliasPath = pathArrs[pathArrs.length - 2];
     const queryRegex = /^\[(\w+)(,\s*\w+)*\]$/;
      /** 
      * 匹配多个path为参数
@@ -91,9 +90,22 @@ function getRouteName(pathStr) { // pathStr = /xxx/xxx.vue
     }
 
     RoutePath = '/'+ RoutePath;
+    function deleteLastValueFromArray(arr) {
+        if (arr.length > 0) {
+            arr.pop(); // 使用 Array.pop() 方法删除最后一个值
+        }
+        return arr;
+    }
+    const aliasPaths = deleteLastValueFromArray(pathArrs);
+    let alias = [];
+    if (aliasPaths && aliasPaths.length && RoutePath.indexOf('/index')>=0) {
+        alias.push('/'+aliasPaths.join('/'));
+        alias.push('/'+aliasPaths.join('/')+'/');
+    }
     return {
         RoutePath,
-        RouteName
+        RouteName,
+        alias
     }
 }
 
@@ -147,15 +159,15 @@ export default {
         if (!configs.eager) { // 动态导入的逻辑, conpoment: ()=> import('xxx/xxx.vue')
             for (let k in modules) {
                 const comp = modules[k];
-                const { RouteName, RoutePath } = getRouteName(k);
+                const { RouteName, RoutePath, alias } = getRouteName(k);
                 const itemComp = getRouteItem(comp, { path: RoutePath, name: RouteName }, false);
                 const RouteObjs = options.RouteBefore[RoutePath||RouteName] || {};
                 let LazyLoadRoute = {};
                 if (typeof RouteQuery === 'object') {
                     LazyLoadRoute = RouteQuery[RoutePath];
                 }
-                Object.assign(itemComp,{ ...RouteObjs, ...LazyLoadRoute });
-                console.log(itemComp, 'itemComp');
+                Object.assign(itemComp,{ ...RouteObjs, ...LazyLoadRoute, alias });
+                console.log(itemComp, 'itemComp import');
                 routerArray.push(itemComp);
                 switch (RoutePath) {
                     case options.index:
@@ -177,13 +189,15 @@ export default {
         } else {
             for (let k in modules) {
                 const comp = modules[k].default;
-                const { RouteName, RoutePath } = getRouteName(k);
+                const { RouteName, RoutePath, alias } = getRouteName(k);
                 const route = Object.assign({
                     props: false,
                     name: RouteName,
-                    path: RoutePath
+                    path: RoutePath,
+                    alias
                 }, comp.route);
                 const itemComp = getRouteItem(comp, route);
+                console.log(itemComp, 'itemComp=');
                 routerArray.push(itemComp);
                 switch (route.path) {
                     case options.index:
@@ -217,7 +231,6 @@ export default {
         }
 
         RouterAPP.beforeResolve(to => {
-            console.log(to,'==')
             let d = {};
             if (Object.keys(RouteStater.RouteState).length) {
                 d = RouteStater.RouteState[to.path] || RouteStater.RouteState[to.name];
