@@ -18,6 +18,7 @@
   },
   "scripts": {
     "dev": "vite build && vite dev demo watch vite build",
+    "dev2": "vite build && vite dev demo2 watch vite build",
     "build": "vite build && vite build demo",
     "preview": "vite preview demo",
     "deploy": "npm publish --registry=https://registry.npmjs.org/",

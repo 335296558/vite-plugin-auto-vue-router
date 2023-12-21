@@ -1,6 +1,5 @@
-import { ref } from 'vue';
 import { createPinia, defineStore } from 'pinia';
-import { createRouter, createMemoryHistory, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory, createMemoryHistory, createWebHistory } from 'vue-router';
 
 //可写自定义转换插件方案 https://cn.vitejs.dev/guide/migration-from-v1.html#custom-blocks-transforms
 
@@ -110,19 +109,18 @@ function getRouteName(pathStr) { // pathStr = /xxx/xxx.vue
 }
 
 export const useRouteState = defineStore('RouteState', ()=> {
-    const RouteState = ref();
+    let RouteState = {};
     const RouteStateData = sessionStorage.getItem("RouteState") || '';
 
     try {
-        RouteState.value = JSON.parse(RouteStateData);
+        RouteState = JSON.parse(RouteStateData);
     } catch (error) {
-        RouteState.value = {}
+        RouteState = {}
     }
 
     function increment(path, query = {}) {
-        // @ts-ignore
-        RouteState.value[path] = query;
-        sessionStorage.setItem("RouteState", JSON.stringify(RouteState.value));
+        RouteState[path] = query;
+        sessionStorage.setItem("RouteState", JSON.stringify(RouteState));
     }
 
     return {
@@ -136,16 +134,15 @@ export default {
         if (!app || !app.use) {
             return console.error('Vue App.use error')
         }
-        
         options = Object.assign({
-            history: null,
+            history: 'h5',
             index: '/index', // 默认首页
             errorPagePath: '/404',
             RouteBefore:{  // 'path': { ...route }
                 /* path: 'login' 
                 '/login':{
                     beforeEnter:()=>{
-                        console.log(989889);
+                        console.log('勾子而已');
                     }
                 }
                 */ 
@@ -167,7 +164,6 @@ export default {
                     LazyLoadRoute = RouteQuery[RoutePath];
                 }
                 Object.assign(itemComp,{ ...RouteObjs, ...LazyLoadRoute, alias });
-                console.log(itemComp, 'itemComp import');
                 routerArray.push(itemComp);
                 switch (RoutePath) {
                     case options.index:
@@ -197,7 +193,6 @@ export default {
                     alias
                 }, comp.route);
                 const itemComp = getRouteItem(comp, route);
-                console.log(itemComp, 'itemComp=');
                 routerArray.push(itemComp);
                 switch (route.path) {
                     case options.index:
@@ -217,17 +212,18 @@ export default {
                 }
             }
         }
-        
+
         const RouterAPP = createRouter({
-            history: options.history || import.meta.env.SSR? createMemoryHistory(): createWebHistory(),
+            history: options.history==='hash'? createWebHashHistory(): options.history==='ssr'? createMemoryHistory(): createWebHistory(),
             routes: routerArray
         });
         
         const RouteStater = useRouteState();
-        RouterAPP.page = (to)=> {
+
+        RouterAPP.page = (to, mode='push')=> {
             const pathStr = to.path || to.name;
             RouteStater.increment(pathStr, to.hiddenParams);
-            return RouterAPP.push(to);
+            return RouterAPP[mode](to);
         }
 
         RouterAPP.beforeResolve(to => {
