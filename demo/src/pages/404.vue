@@ -7,10 +7,10 @@
 		</div>
 	</div>
 </template>
-<script>
-export default {
-    displayName: '404'
-}
+
+<script setup>
+import { useRoute } from 'vue-router';
+//! @__ROUTE_LAYOUT__: 'noAuth'
 </script>
 
 <style module lang="scss" scoped>
