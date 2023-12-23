@@ -15,8 +15,6 @@ yarn add vite-plugin-auto-vue-router --dev
 
 ```
 
-#####使用方法
-
 ##### 配置参数说明
 | 参数名 | 类型 | 默认值 | 说明 |
 | -------- | -------- | -------- | -------- |
@@ -91,7 +89,7 @@ Router.page({
 // user/detail.vue
 console.log(route.params.id) // = 21
 
-// 若无隐藏式参的需求可以直接用router.push 进行跳转
+// 若无隐式传参的需求可以直接用router.push 进行跳转
 ```
 
 ###### 关于layout布局，如果你需要帮助？可以参考[demo](demo)
