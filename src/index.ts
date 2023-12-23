@@ -8,7 +8,7 @@ function Log(text: string){
     console.log('\x1b[31m%s\x1b[0m', text);
 }
 
-interface IOptions {
+export interface IOptions {
     debug?: boolean;
     dir?: string | null;
     ignore: string[];

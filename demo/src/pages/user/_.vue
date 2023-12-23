@@ -8,13 +8,6 @@
 <script setup>
 import { ref, provide, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
-defineOptions({
-    customOptions: {
-        route:{
-            layout: 'default',
-        }
-    }
-})
 const route = useRoute();
 const router = useRouter();
 console.log(route, '-=-');
