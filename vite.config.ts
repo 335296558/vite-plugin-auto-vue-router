@@ -19,7 +19,7 @@ export default defineConfig({
             formats:['es']
         },
         rollupOptions: {
-            external: ['vue', 'vue-router', 'fs'],
+            external: ['vue', 'vue-router', 'url', 'fs', 'path', 'fast-glob'],
             plugins: [
                 copy({
                     targets: [
