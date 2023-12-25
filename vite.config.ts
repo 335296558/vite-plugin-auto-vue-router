@@ -10,6 +10,9 @@ export default defineConfig({
     plugins: [
         vue(),
     ],
+    optimizeDeps: {
+        exclude: ['fast-glob']
+    },
     build: {
         lib: {
             entry: {
