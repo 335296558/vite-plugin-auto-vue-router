@@ -1,8 +1,10 @@
+import type { ViteDevServer, ModuleNode } from 'vite';
 // @ts-ignore
 import AutoVueRouterCodeString from './AutoVueRouter.js?raw';
 // @ts-ignore
 import JSYaml from 'js-yaml';
 import { getPageRouteQuery } from './utils';
+import { resolve } from 'path';
 
 function Log(text: string){
     console.log('\x1b[31m%s\x1b[0m', text);
@@ -95,7 +97,26 @@ export default function AutoVueRouter(options: IOptions) {
                 // console.log(outinput, 'outinput');
                 return `\n${outinput}`;
             }
-        }
+        },
+        // async handleHotUpdate({ file, server }:{ file: string ; server: ViteDevServer }) { // 热更新处理
+        //     const RouterPath = resolve(server.config.root, `${options.dir}`);
+        //     if (file.endsWith('.vue') && file.indexOf(RouterPath)>=0) {
+        //         server.watcher.on('add', async (path: string) => {
+        //             console.log(path, 'path')
+        //         });
+        //         const { moduleGraph } = server;
+        //         const module = moduleGraph.getModuleById(resolvedModuleId) as ModuleNode;
+        //         if (module) {
+        //             server.reloadModule(module);
+        //             server.ws.send({
+        //                 type: 'full-reload',
+        //                 path: '*',
+        //             });
+        //         }
+        //         return module;
+        //     }
+        //     return null;
+        // },
     }
 
 }

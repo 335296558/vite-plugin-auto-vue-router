@@ -110,9 +110,8 @@ function getRouteName(pathStr) { // pathStr = /xxx/xxx.vue
 
 export const useRouteState = defineStore('RouteState', ()=> {
     let RouteState = {};
-    const RouteStateData = sessionStorage.getItem("RouteState") || '';
-
     try {
+        const RouteStateData = sessionStorage.getItem("RouteState") || '';
         RouteState = JSON.parse(RouteStateData);
     } catch (error) {
         RouteState = {}
@@ -129,103 +128,105 @@ export const useRouteState = defineStore('RouteState', ()=> {
     }
 });
 
-export default {
-    install(app, options) {
-        if (!app || !app.use) {
-            return console.error('Vue App.use error')
+export function createVueAutoRouter(options={}, app) {
+    if (!app || !app.use) {
+        return console.error('Vue App.use error')
+    }
+    options = Object.assign({
+        history: 'h5',
+        index: '/index', // 默认首页
+        errorPagePath: '/404',
+        RouteBefore:{  // 'path': { ...route }
+            /* path: 'login' 
+            '/login':{
+                beforeEnter:()=>{
+                    console.log('勾子而已');
+                }
+            }
+            */ 
         }
-        options = Object.assign({
-            history: 'h5',
-            index: '/index', // 默认首页
-            errorPagePath: '/404',
-            RouteBefore:{  // 'path': { ...route }
-                /* path: 'login' 
-                '/login':{
-                    beforeEnter:()=>{
-                        console.log('勾子而已');
-                    }
-                }
-                */ 
+    }, options);
+    
+    app.use(pinia);
+    let routerArray = [];
+    /*#vite-plugin-auto-vue-router-options*/
+    const modules = import.meta.glob(/*#vite-plugin-auto-vue-router-path*/ /*#vite-plugin-auto-vue-router-glob-rules*/);
+    if (!configs.eager) { // 动态导入的逻辑, conpoment: ()=> import('xxx/xxx.vue')
+        for (let k in modules) {
+            const comp = modules[k];
+            const { RouteName, RoutePath, alias } = getRouteName(k);
+            const itemComp = getRouteItem(comp, { path: RoutePath, name: RouteName }, false);
+            const RouteObjs = options.RouteBefore[RoutePath||RouteName] || {};
+            let LazyLoadRoute = {};
+            if (typeof RouteQuery === 'object') {
+                LazyLoadRoute = RouteQuery[RoutePath];
             }
-        }, options);
-        
-        app.use(pinia);
-        let routerArray = [];
-        /*#vite-plugin-auto-vue-router-options*/
-        const modules = import.meta.glob(/*#vite-plugin-auto-vue-router-path*/ /*#vite-plugin-auto-vue-router-glob-rules*/);
-        if (!configs.eager) { // 动态导入的逻辑, conpoment: ()=> import('xxx/xxx.vue')
-            for (let k in modules) {
-                const comp = modules[k];
-                const { RouteName, RoutePath, alias } = getRouteName(k);
-                const itemComp = getRouteItem(comp, { path: RoutePath, name: RouteName }, false);
-                const RouteObjs = options.RouteBefore[RoutePath||RouteName] || {};
-                let LazyLoadRoute = {};
-                if (typeof RouteQuery === 'object') {
-                    LazyLoadRoute = RouteQuery[RoutePath];
-                }
-                Object.assign(itemComp,{ ...RouteObjs, ...LazyLoadRoute, alias });
-                routerArray.push(itemComp);
-                switch (RoutePath) {
-                    case options.index:
-                        routerArray.push({
-                            ...itemComp,
-                            path:'/',
-                            name: '/'
-                        });
-                        break;
-                    case options.errorPagePath:
-                        routerArray.push({
-                            ...itemComp,
-                            path:'/:pathMatch(.*)*',
-                            name: 'NotFound'
-                        });
-                        break;
-                }
-            }
-        } else {
-            for (let k in modules) {
-                const comp = modules[k].default;
-                const { RouteName, RoutePath, alias } = getRouteName(k);
-                const route = Object.assign({
-                    props: false,
-                    name: RouteName,
-                    path: RoutePath,
-                    alias
-                }, comp.route);
-                const itemComp = getRouteItem(comp, route);
-                routerArray.push(itemComp);
-                switch (route.path) {
-                    case options.index:
-                        routerArray.push({
-                            ...itemComp,
-                            path:'/',
-                            name: '/'
-                        });
-                        break;
-                    case options.errorPagePath:
-                        routerArray.push({
-                            ...itemComp,
-                            path:'/:pathMatch(.*)*',
-                            name: 'NotFound'
-                        });
-                        break;
-                }
+            Object.assign(itemComp,{ ...RouteObjs, ...LazyLoadRoute, alias });
+            routerArray.push(itemComp);
+            switch (RoutePath) {
+                case options.index:
+                    routerArray.push({
+                        ...itemComp,
+                        path:'/',
+                        name: '/'
+                    });
+                    break;
+                case options.errorPagePath:
+                    routerArray.push({
+                        ...itemComp,
+                        path:'/:pathMatch(.*)*',
+                        name: 'NotFound'
+                    });
+                    break;
             }
         }
+    } else {
+        for (let k in modules) {
+            const comp = modules[k].default;
+            const { RouteName, RoutePath, alias } = getRouteName(k);
+            const route = Object.assign({
+                props: false,
+                name: RouteName,
+                path: RoutePath,
+                alias
+            }, comp.route);
+            const itemComp = getRouteItem(comp, route);
+            routerArray.push(itemComp);
+            switch (route.path) {
+                case options.index:
+                    routerArray.push({
+                        ...itemComp,
+                        path:'/',
+                        name: '/'
+                    });
+                    break;
+                case options.errorPagePath:
+                    routerArray.push({
+                        ...itemComp,
+                        path:'/:pathMatch(.*)*',
+                        name: 'NotFound'
+                    });
+                    break;
+            }
+        }
+    }
 
-        const RouterAPP = createRouter({
-            history: options.history==='hash'? createWebHashHistory(): options.history==='ssr'? createMemoryHistory(): createWebHistory(),
-            routes: routerArray
-        });
-        
-        const RouteStater = useRouteState();
+    const RouterAPP = createRouter({
+        history: options.history==='hash'? createWebHashHistory(): options.history==='ssr'? createMemoryHistory(): createWebHistory(),
+        routes: routerArray
+    });
+    
+    const RouteStater = useRouteState();
 
-        RouterAPP.page = (to, mode='push')=> {
-            const pathStr = to.path || to.name;
+    RouterAPP.page = (to, mode='push')=> {
+        const pathStr = to.path || to.name;
+        if (options.history!=='ssr') {
             RouteStater.increment(pathStr, to.hiddenParams);
-            return RouterAPP[mode](to);
         }
+        return RouterAPP[mode](to);
+    }
 
+    if (options.history!=='ssr') {
         RouterAPP.beforeResolve(to => {
             let d = {};
             if (Object.keys(RouteStater.RouteState).length) {
@@ -233,7 +234,15 @@ export default {
             }
             to.params = Object.assign(to.params, d);
         });
+    }
 
-        app.use(RouterAPP);
+    app.use(RouterAPP);
+
+    return RouterAPP;
+}
+
+export default {
+    install(app, options) {
+        createVueAutoRouter(options, app);
     }
 }
