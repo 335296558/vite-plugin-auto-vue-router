@@ -27,7 +27,6 @@ const LayoutComponentName = computed(() => {
     setTimeout(()=>{
         show.value = true
     }, 380)
-    console.log(Route.meta, 'Route.meta');
     return markRaw(Route.meta.layout=='noAuth'? NoAuthLayout: DefaultLayout)
 });
 </script>
