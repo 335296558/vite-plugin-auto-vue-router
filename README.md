@@ -44,7 +44,7 @@ export default defineConfig({
 })
 
 // main.ts
-import AutoVueRouter from 'virtual:auto-vue-router';
+import AutoVueRouter, { createVueAutoRouter } from 'virtual:auto-vue-router';
 VueApp.use(AutoVueRouter, { /* options */ });
 ```
 ##### AutoVueRouter options 配置参数说明

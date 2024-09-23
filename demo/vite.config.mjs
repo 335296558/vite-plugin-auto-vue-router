@@ -3,7 +3,8 @@ import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import { fileURLToPath, URL } from "url";
 // import AutoVueRouter from 'vite-plugin-auto-vue-router';
-import AutoVueRouter from '../dist/index';
+// import AutoVueRouter from '../dist/index';
+import AutoVueRouter from 'vite-plugin-auto-vue-router';
 
 // https://vitejs.dev/config/
 export default defineConfig({

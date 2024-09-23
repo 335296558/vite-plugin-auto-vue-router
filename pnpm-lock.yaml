@@ -41,8 +41,8 @@ devDependencies:
     specifier: ^5.2.13
     version: 5.2.13(@types/node@20.14.2)(sass@1.77.4)
   vite-plugin-auto-vue-router:
-    specifier: ^2.0.6
-    version: 2.0.6
+    specifier: ^2.0.7
+    version: 2.0.7
 
 packages:
 
@@ -971,8 +971,8 @@ packages:
       inherits: 2.0.3
     dev: true
 
-  /vite-plugin-auto-vue-router@2.0.6:
-    resolution: {integrity: sha512-eVYqNnWKDy1E/JOxQHSx2BpYWamKW3XiCHFi7gB0x8OTW4tSVYWU6yON9u5N1hfCTkHtHY0TySGQw7lOrDgXUQ==}
+  /vite-plugin-auto-vue-router@2.0.7:
+    resolution: {integrity: sha512-moc0tmh/nTn0l4CLcH7is2f3Xrar0EgzssTpPF7+DxBHzgFKT6F+BWL8I+QgmoFa7pmPMDhDItrcxXKS8n19LQ==}
     dependencies:
       fast-glob: 3.3.2
       js-yaml: 4.1.0
